@@ -1,4 +1,3 @@
 # dotcommonitor-loadview
 LoadView 
-# test
-test data
+# Configuring Plugin
