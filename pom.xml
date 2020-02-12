@@ -87,6 +87,14 @@
         <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
     </scm>
     
+    <developers>
+        <developer>
+            <id>dotcommonitor</id>
+            <name>Dotcom-Monitor</name>
+            <email>jira@dotcom-monitor.com</email>
+        </developer>
+    </developers>
+    
     <repositories>
         <repository>
             <id>repo.jenkins-ci.org</id>
