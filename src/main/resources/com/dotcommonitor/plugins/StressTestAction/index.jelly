@@ -1,0 +1,300 @@
+<?jelly escape-by-default='true'?>
+
+<j:jelly xmlns:j="jelly:core" 
+         xmlns:st="jelly:stapler"
+         xmlns:d="jelly:define" 
+         xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson"
+         xmlns:f="/lib/form">
+
+<l:layout>
+
+    <st:include it="${it.owner}" page="sidepanel.jelly" from="${it.owner}" />
+        
+    <l:main-panel>
+
+        <h1>Load Test Results</h1>
+        
+        <f:entry> <!-- Start -->
+
+            <div style="width: 632px;">
+            <style>
+                .box {
+                    border-radius: 6px;
+                    padding: 24px;
+                    background: #eceff1;
+                    font-family: Arial, sans-serif; }
+                .box__holder {
+                    border-radius: 6px;
+                    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16), 0 2px 2px 0 rgba(0, 0, 0, 0.08);
+                    margin-top: 24px;
+                    padding: 24px;
+                    background-color: #fff; }
+                .box__header {
+                    display: flex;
+                    justify-content: space-between; }
+                .box__button {
+                    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease-in-out, color 0.15s ease-in-out;
+                    border-radius: 4px;
+                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.08), 0 2px 2px -2px rgba(0, 0, 0, 0.16);
+                    display: inline-flex;
+                    padding: 12px 20px 12px 24px;
+                    background-color: #039be5;
+                    color: #fff;
+                    font-size: 16px;
+                    font-weight: bold;
+                    line-height: 24px;
+                    letter-spacing: .57px;
+                    text-decoration: none;
+                    text-transform: uppercase; }
+                .box__button img {
+                    margin-left: 12px; }
+                .box__button:hover {
+                    background-color: #0288d1; }
+                .box__inner {
+                    align-items: center;
+                    display: flex;
+                    justify-content: space-between; }
+                .box__title {
+                    display: block;
+                    margin-bottom: 24px;
+                    color: rgba(0, 0, 0, 0.8);
+                    font-size: 18px;
+                    font-weight: bold;
+                    line-height: 24px; }
+                .box__table {
+                    display: flex; }
+                .box__table table {
+                    border-spacing: 0;
+                    width: 50%;
+                    color: rgba(0, 0, 0, 0.6);
+                    font-size: 13px;
+                    line-height: 20px; }
+                .box__table table:not(:first-of-type) {
+                    border-left: 1px solid rgba(0, 0, 0, 0.08);
+                    padding-left: 24px; }
+                .box__table table:not(:last-of-type) {
+                    padding-right: 24px; }
+                .box__table table th {
+                    padding-bottom: 5px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    text-align: left; }
+                .box__table table td {
+                    padding-top: 10px; }
+                .box__table table td:nth-of-type(1) {
+                    padding-right: 16px;
+                    white-space: nowrap; }
+                .box__table table td:nth-of-type(2) {
+                    width: 100%;
+                    color: rgba(0, 0, 0, 0.8);
+                    font-size: 14px; }
+                .box__footer {
+                    display: flex;
+                    margin-top: 24px;
+                    overflow: hidden; }
+
+                .status {
+                    display: flex;
+                    font-size: 18px;
+                    font-weight: bold;
+                    line-height: 24px; }
+                .status_type_fail {
+                    color: #e53935; }
+                .status_type_success {
+                    color: #4caf50; }
+                .status img {
+                    margin-right: 12px; }
+
+                .result {
+                    display: flex; }
+                .result__item {
+                    display: flex;
+                    color: rgba(0, 0, 0, 0.6);
+                    font-size: 13px;
+                    line-height: 20px; }
+                .result__item:not(:first-of-type) {
+                    border-left: 1px solid rgba(0, 0, 0, 0.08);
+                    padding-left: 20px; }
+                .result__item:not(:last-of-type) {
+                    padding-right: 20px; }
+                .result__value {
+                    margin-left: 16px; }
+                .result__value span {
+                    color: rgba(0, 0, 0, 0.8); }
+
+                .info_custom {
+                    align-items: flex-start;
+                    display: flex;
+                    overflow: hidden;
+                    width: 50%; }
+                .info_custom:not(:first-of-type) {
+                    padding-left: 16px; }
+                .info_custom:not(:last-of-type) {
+                    padding-right: 16px; }
+                .info__icon {
+                    flex-shrink: 0;
+                    margin-top: 2px;
+                    margin-right: 20px; }
+                .info__box {
+                    overflow: hidden;
+                    color: rgba(0, 0, 0, 0.4);
+                    font-size: 12px;
+                    line-height: 20px; }
+                .info__title {
+                    display: block;
+                    overflow: hidden;
+                    color: rgba(0, 0, 0, 0.8);
+                    font-size: 16px;
+                    line-height: 24px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap; }
+            </style>
+
+            <div class="box">
+                <div class="box__header">
+                    <img src="${rootURL}/plugin/dotcommonitor-loadview/images/logo.svg" title="" alt="logo" />
+                    <a class="box__button" style="text-decoration: none; color: #fff;" href="${it.ReportUrl}" target="_blank">More details <img src="${rootURL}/plugin/dotcommonitor-loadview/images/button-icon.svg"/></a>
+                </div>
+                
+                <j:if test="${it.headerType == 3}">
+                    <div class="box__holder">
+                        <div class="box__inner">
+                            <div class="status status_type_fail"><img src="${rootURL}/plugin/dotcommonitor-loadview/images/failure.svg"/> Failure</div>
+                            <div class="result">
+                                <div class="result__item">
+                                    Average Time <span class="result__value"><span>${it.avgDuration} sec</span> (limit ${it.avgTimeThreshold} sec)</span>
+                                </div>
+                                <div class="result__item">
+                                    Errors <span class="result__value"><span>${it.errors}%</span> (limit ${it.errorThreshold}%)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </j:if>
+                <j:if test="${it.headerType == 2}">
+                    <div class="box__holder">
+                        <div class="box__inner">
+                            <div class="status status_type_fail"><img src="${rootURL}/plugin/dotcommonitor-loadview/images/failure.svg"/> Failure</div>
+                            <div class="result">
+                                <div class="result__item">
+                                    Average Time <span class="result__value"><span>${it.avgDuration} sec</span> (limit ${it.avgTimeThreshold} sec)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </j:if>
+                <j:if test="${it.headerType == 1}">
+                    <div class="box__holder">
+                        <div class="box__inner">
+                            <div class="status status_type_fail"><img src="${rootURL}/plugin/dotcommonitor-loadview/images/failure.svg"/> Failure</div>
+                            <div class="result">
+                                <div class="result__item">
+                                    Errors <span class="result__value"><span>${it.errors}%</span> (limit ${it.errorThreshold}%)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </j:if>
+                <j:if test="${it.headerType == 0}">
+                    <div class="box__holder">
+                        <div class="box__inner">
+                            <div class="status status_type_success"><img src="${rootURL}/plugin/dotcommonitor-loadview/images/succeed.svg"/> Succeed</div>
+                        </div>
+                    </div>
+                </j:if>
+                
+                <div class="box__holder">
+                    <span class="box__title">General Information</span>
+                    <div class="box__table">
+                        <table>
+                            <thead>
+                                <tr><th>Load</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Started</td><td>${it.startedTime}</td></tr>
+                                <tr><td>Stopped</td><td>${it.stoppedTime}</td></tr>
+                                <tr><td>Duration</td><td>${it.duration}</td></tr>
+                                <tr><td>Max. Users</td><td>${it.maxUsers}</td></tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <thead>
+                                <tr><th>Sessions</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Total</td><td>${it.total}</td></tr>
+                                <tr><td>Succeeded</td><td>${it.succeeded}</td></tr>
+                                <tr><td>Failed</td><td>${it.failed}</td></tr>
+                                <tr><td>Uncompleted</td><td>${it.uncompleted}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="box__footer">
+                    <j:if test="${it.curveType == 0}">
+                        <div class="info_custom">
+                            <img class="info__icon" src="${rootURL}/plugin/dotcommonitor-loadview/images/load-type-static.svg"/>
+                            <div class="info__box">
+                                <span class="info__title">Scenario: ${it.scenarioName}</span>
+                                Load Step Curve
+                            </div>
+                        </div>
+                    </j:if>
+                    <j:if test="${it.curveType == 1}">
+                        <div class="info_custom">
+                            <img class="info__icon" src="${rootURL}/plugin/dotcommonitor-loadview/images/load-type-goal_based.svg"/>
+                            <div class="info__box">
+                                <span class="info__title">Scenario: ${it.scenarioName}</span>
+                                Goal-Based Curve
+                            </div>
+                        </div>
+                    </j:if>
+                    <j:if test="${it.curveType == 2}">
+                        <div class="info_custom">
+                            <img class="info__icon" src="${rootURL}/plugin/dotcommonitor-loadview/images/load-type-dynamic.svg"/>
+                            <div class="info__box">
+                                <span class="info__title">Scenario: ${it.scenarioName}</span>
+                                Dynamic Adjustable Curve Type
+                            </div>
+                        </div>
+                    </j:if>
+                    <j:if test="${it.platformType == 0}">
+                        <div class="info_custom">
+                            <img class="info__icon" src="${rootURL}/plugin/dotcommonitor-loadview/images/device-type-server_view.svg"/>
+                            <div class="info__box">
+                                <span class="info__title">Load Device: ${it.deviceName}</span>
+                                HTTP/S Stress Test
+                            </div>
+                        </div>
+                    </j:if>
+                    <j:if test="${it.platformType == 1}">
+                        <div class="info_custom">
+                            <img class="info__icon" src="${rootURL}/plugin/dotcommonitor-loadview/images/device-type-browser_view.svg"/>
+                            <div class="info__box">
+                                <span class="info__title">Load Device: ${it.deviceName}</span>
+                                BrowserView
+                            </div>
+                        </div>
+                    </j:if>
+                    <j:if test="${it.platformType == 2}">
+                        <div class="info_custom">
+                            <img class="info__icon" src="${rootURL}/plugin/dotcommonitor-loadview/images/device-type-user_view.svg"/>
+                            <div class="info__box">
+                                <span class="info__title">Load Device: ${it.deviceName}</span>
+                                UserView
+                            </div>
+                        </div>
+                    </j:if>
+                </div>
+            </div>   
+           </div>
+        
+        </f:entry> <!-- End -->
+                
+    </l:main-panel>
+
+
+</l:layout>
+
+</j:jelly>
