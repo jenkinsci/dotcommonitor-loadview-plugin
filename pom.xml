@@ -33,6 +33,7 @@
         <relativePath />
     </parent>
     
+    <groupId>io.jenkins.plugins</groupId>
     <artifactId>dotcommonitor-loadview</artifactId>
     <version>1.0</version>
     <packaging>hpi</packaging>
