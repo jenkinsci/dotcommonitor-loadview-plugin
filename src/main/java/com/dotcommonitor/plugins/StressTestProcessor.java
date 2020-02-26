@@ -2,7 +2,7 @@ package com.dotcommonitor.plugins;
 
 import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
-import hudson.model.AbstractBuild;
+import hudson.model.Run;
 import hudson.util.Secret;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -22,19 +22,19 @@ public class StressTestProcessor {
     private static final int RETRY_COUNT = 3;
     private final String credentialsId;
     private final String scenarioId;
-    private final AbstractBuild build;
+    private final Run<?, ?> run;
     private final PrintStream console;
     private final int errorThreshold;
     private final int avgTime;
     private final List<StressTestTaskStatus> provisionalStatuses;
     
     
-    public StressTestProcessor(PrintStream consoleStream, AbstractBuild currentBuild, StressTestPublisher publisher) {
+    public StressTestProcessor(PrintStream consoleStream, Run<?, ?> runBuild, StressTestPublisher publisher) {
         Validate.notNull(consoleStream);
-        Validate.notNull(currentBuild);
+        Validate.notNull(runBuild);
         
         console = consoleStream;
-        build = currentBuild;
+        run = runBuild;
         credentialsId = publisher.getCredentialsId();
         scenarioId = publisher.getScenarioId();
         errorThreshold = publisher.getErrorThreshold();
@@ -47,7 +47,7 @@ public class StressTestProcessor {
         provisionalStatuses.add(StressTestTaskStatus.PREPARING_REPORT);
         provisionalStatuses.add(StressTestTaskStatus.CANCELLING);
     }
-    
+
     
     public boolean process() throws Exception {
         
@@ -129,9 +129,9 @@ public class StressTestProcessor {
             throw new StressTestException(message);
         }
         
-        StressTestAction action = new StressTestAction(build, data, errorThreshold, avgTime, 
+        StressTestAction action = new StressTestAction(run, data, errorThreshold, avgTime, 
                 settings, scenarioName, resolver.getUrlReport(testId));
-        build.addAction(action);
+        run.addAction(action);
         
         Boolean success = action.isSuccess();
         
@@ -151,7 +151,7 @@ public class StressTestProcessor {
         StressTestCredentials credentials = CredentialsProvider.findCredentialById(
             credentialsId, 
             StressTestCredentials.class, 
-            build, 
+            run, 
             Collections.<DomainRequirement>emptyList());
         
         if (credentials == null) {

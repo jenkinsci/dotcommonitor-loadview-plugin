@@ -12,15 +12,15 @@
          <img src="${rootURL}/plugin/dotcommonitor-loadview/images/logo.svg" alt="logo"/>
     </f:entry>
     <f:entry title="${%stressTestPublisher.credentils.title}" field="credentialsId">
-        <c:select/>
+        <c:select checkMethod="post"/>
     </f:entry>
     <f:entry title="${%stressTestPublisher.scenario.title}" field="scenarioId">
-        <f:textbox/>
+        <f:textbox checkMethod="post"/>
     </f:entry>
     <f:entry title="${%stressTestPublisher.error_threshold.title}" field="errorThreshold">
-        <f:textbox/>
+        <f:textbox checkMethod="post"/>
     </f:entry>
     <f:entry title="${%stressTestPublisher.avg_time.title}" field="avgTime">
-        <f:textbox/>
+        <f:textbox checkMethod="post"/>
     </f:entry>
 </j:jelly>

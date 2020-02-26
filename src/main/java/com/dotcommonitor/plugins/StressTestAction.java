@@ -1,20 +1,19 @@
 package com.dotcommonitor.plugins;
 
-import hudson.model.AbstractBuild;
-import hudson.model.Action;
+import hudson.model.Run;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import jenkins.model.RunAction2;
 import org.apache.commons.lang.Validate;
 
 /**
  *
  * @author dotcom-monitor.com
  */
-public class StressTestAction implements Action {
+public class StressTestAction implements RunAction2 {
 
     private final static String ICON_FILENAME = "graph.gif";
     private final static String URL_NAME = "stresstestresults";
-    private final AbstractBuild<?, ?> build;
     private final long startTime;
     private final double avgDuration;
     private final long finishedTime;
@@ -31,19 +30,19 @@ public class StressTestAction implements Action {
     private final String scenario;
     private final String deviceName;
     private final String report;
+    private Run<?, ?> run;
     
     
-    
-    public StressTestAction(AbstractBuild<?, ?> currentBuild, StressTestPluginData data, int threshold, int avgTime, 
+    public StressTestAction(Run<?, ?> runBuild, StressTestPluginData data, int threshold, int avgTime, 
             StressTestSettings settings, String scenarioName, String reportUrl) {
 
-        Validate.notNull(currentBuild);
+        Validate.notNull(runBuild);
         Validate.notNull(data);
         Validate.notNull(settings);
         Validate.notEmpty(scenarioName);
         Validate.notEmpty(reportUrl);
         
-        build = currentBuild;
+        run = runBuild;
         startTime = data.getStartTime();
         finishedTime = data.getFinishedTime();
         sessionsCountSucceded = data.getSessionsCountSucceded();
@@ -63,8 +62,20 @@ public class StressTestAction implements Action {
     }
     
     
-    public AbstractBuild<?, ?> getOwner() {
-        return build;
+    public Run<?, ?> getOwner() {
+        return run;
+    }
+    
+    
+    @Override
+    public void onAttached(Run<?, ?> runBuild) {
+        run = runBuild;
+    }
+
+    
+    @Override
+    public void onLoad(Run<?, ?> runBuild) {
+        run = runBuild;
     }
     
     

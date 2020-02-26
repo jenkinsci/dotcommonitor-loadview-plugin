@@ -5,12 +5,13 @@ import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.common.StandardListBoxModel;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
 import hudson.Extension;
+import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
 import hudson.model.Item;
 import hudson.model.Result;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.security.ACL;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
@@ -22,18 +23,21 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collections;
 import jenkins.model.Jenkins;
+import jenkins.tasks.SimpleBuildStep;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.verb.POST;
 
 
 /**
  *
  * @author dotcom-monitor.com
  */
-public class StressTestPublisher extends Notifier {
+public class StressTestPublisher extends Notifier implements SimpleBuildStep {
     
     private final String scenarioId;
     private final String credentialsId;
@@ -43,7 +47,6 @@ public class StressTestPublisher extends Notifier {
     
     @DataBoundConstructor
     public StressTestPublisher(String scenarioId, String credentialsId, int errorThreshold, int avgTime) {
-        
         Validate.notEmpty(scenarioId);
         Validate.notEmpty(credentialsId);
         
@@ -78,10 +81,10 @@ public class StressTestPublisher extends Notifier {
     public BuildStepMonitor getRequiredMonitorService() {
         return BuildStepMonitor.BUILD;
     }
-    
+
     
     @Override
-    public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) 
+    public void perform(Run<?, ?> run, FilePath fp, Launcher lnchr, TaskListener listener) 
             throws InterruptedException, IOException {
         
         Boolean result = false;
@@ -89,7 +92,7 @@ public class StressTestPublisher extends Notifier {
         PrintStream console = listener.getLogger();
                 
         try {
-            processor = new StressTestProcessor(console, build, this);
+            processor = new StressTestProcessor(console, run, this);
             result = processor.process();
         }
         catch (StressTestException ex) {
@@ -105,12 +108,11 @@ public class StressTestPublisher extends Notifier {
         }
         
         if (!result)
-            build.setResult(Result.FAILURE);
-        
-        return result;
+            run.setResult(Result.FAILURE);
     }
     
     
+    @Symbol("dotcomMonitor")
     @Extension
     public static class StressTestPublisherDescriptor extends BuildStepDescriptor<Publisher> {
 
@@ -125,7 +127,7 @@ public class StressTestPublisher extends Notifier {
             return Messages.StressTestPublisher_DisplayName();
 	}
 
-        
+        @POST
         public FormValidation doCheckScenarioId(@QueryParameter String value) {
             
             return StringUtils.isBlank(value) ?
@@ -133,7 +135,7 @@ public class StressTestPublisher extends Notifier {
                 FormValidation.ok();
         }
         
-        
+        @POST
         public FormValidation doCheckCredentialsId(final @AncestorInPath Item item, @QueryParameter String value) {
             
             if (item == null) {
@@ -159,7 +161,7 @@ public class StressTestPublisher extends Notifier {
             return FormValidation.ok();
         }
         
-        
+        @POST
         public FormValidation doCheckAvgTime(@QueryParameter String value) {
             
             FormValidation result;
@@ -174,7 +176,7 @@ public class StressTestPublisher extends Notifier {
             return result;
         }
         
-        
+        @POST
         public FormValidation doCheckErrorThreshold(@QueryParameter String value) {
             
             FormValidation result;
@@ -191,7 +193,7 @@ public class StressTestPublisher extends Notifier {
             return result;
         }
         
-        
+        @POST
         public ListBoxModel doFillCredentialsIdItems(final @AncestorInPath Item item, @QueryParameter String credentialsId) {
             
             StandardListBoxModel result = new StandardListBoxModel();

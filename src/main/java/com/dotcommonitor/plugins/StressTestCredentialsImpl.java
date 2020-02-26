@@ -12,6 +12,7 @@ import net.sf.json.JSONException;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.verb.POST;
 
 /**
  *
@@ -46,15 +47,14 @@ public class StressTestCredentialsImpl extends BaseStandardCredentials implement
             return Messages.StressTestCredentialsImpl_CredentialsDescription();
         }
 
-        
-        public FormValidation doCheckKey(@QueryParameter String value) {
-
+        @POST
+        public FormValidation doCheckApiKey(@QueryParameter String value) {
             return StringUtils.isBlank(value) ?
                 FormValidation.error(Messages.StressTestCredentialsImpl_MandatoryField()) :
                 FormValidation.ok();
         }
         
-        
+        @POST
         public FormValidation doTestConnection(@QueryParameter("apiKey") final Secret apiKey) 
                 throws MessagingException, IOException, JSONException, ServletException {
 
