@@ -8,6 +8,7 @@ import hudson.util.Secret;
 import java.io.IOException;
 import javax.mail.MessagingException;
 import javax.servlet.ServletException;
+import jenkins.model.Jenkins;
 import net.sf.json.JSONException;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -58,6 +59,7 @@ public class StressTestCredentialsImpl extends BaseStandardCredentials implement
         public FormValidation doTestConnection(@QueryParameter("apiKey") final Secret apiKey) 
                 throws MessagingException, IOException, JSONException, ServletException {
 
+            Jenkins.getInstance().checkPermission(Jenkins.ADMINISTER);
             FormValidation result = null;
             
             try {
