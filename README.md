@@ -8,6 +8,7 @@
 * Load injector servers from 18 zones around the world including the United States, Canada, South America, Europe, and APAC.
 * Whitelisting of Fixed IPs 
 ## Configuring Plugin
+To start using a LoadView Load Test Scenario to test your build in Jenkins, you must have an active Dotcom-Monitor account and a configured Test Scenario.
 1. Login to the Dotcom-Monitor LoadView account.
 2. In LoadView, create your LoadView UID under **Account > Integrations > Add Integration > Stress Testing Web API**. Copy the integration UID.
 ![Integratio UID](docs/images/integration.png)
