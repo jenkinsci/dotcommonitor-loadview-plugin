@@ -9,6 +9,10 @@
 * Whitelisting of Fixed IPs 
 ## Configuring Plugin
 To start using a LoadView Load Test Scenario to test your build in Jenkins, you must have an active Dotcom-Monitor account and a configured Test Scenario.
+
+**Please open a** [support ticket](https://user.dotcom-monitor.com/Ticket/HistoryTicket.aspx) **to enable access to the API from your IP addresses.**
+
+To configure the LoadView plugin:
 1. Login to the Dotcom-Monitor LoadView account.
 2. In LoadView, create your LoadView UID under **Account > Integrations > Add Integration > Stress Testing Web API**. Copy the integration UID.
 ![Integratio UID](docs/images/integration.png)
